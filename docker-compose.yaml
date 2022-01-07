@@ -1,0 +1,49 @@
+version: "2.4"
+
+x-roslog-environment: &roslog-environment
+  ROS_PYTHON_LOG_CONFIG_FILE: /python_logging.conf
+  ROSCONSOLE_CONFIG_FILE: /cpp_logging.conf
+  ROSCONSOLE_FORMAT: "${X_ROSCONSOLE_FORMAT:-${node}}/${X_ROSCONSOLE_FORMAT:-${logger}} [${X_ROSCONSOLE_FORMAT:-${severity}}] ${X_ROSCONSOLE_FORMAT:-${message}}"
+
+x-logging:
+  &default-logging
+  driver: "journald"
+  options:
+    tag: "{{.Name}}/{{.ID}}"
+
+services:
+  vx300s:
+    build: ./vx300s
+    depends_on:
+      - ros_master
+    network_mode: "host"
+    restart: always
+    privileged: true
+    environment:
+      <<: *roslog-environment
+      PYTHONUNBUFFERED: 1
+      DISPLAY: ${DISPLAY}
+    volumes:
+      - type: bind
+        source: /dev
+        target: /dev
+        read_only: true
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+      - "~/.Xauthority:/root/.Xauthority"
+      - "./config/ros_python_logging.conf:/python_logging.conf:ro"
+      - "./config/ros_cpp_logging.conf:/cpp_logging.conf:ro"
+      - "./config/perception:/root/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/interbotix_xsarm_perception/config/:rw"
+      - "./vx300s/docker-entrypoint.sh:/app/docker-entrypoint.sh:ro"
+      - "./vx300s/scripts:/app/scripts:ro"
+    logging: *default-logging
+    # command: "/bin/bash -c 'while :; do sleep 1; done'"
+
+  ros_master:
+    image: ros:melodic-ros-core
+    hostname: localhost
+    command: stdbuf -o L roscore
+    restart: always
+    network_mode: "host"
+    ports:
+      - "11311:11311"
+    logging: *default-logging

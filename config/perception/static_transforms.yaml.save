@@ -1,0 +1,9 @@
+- child_frame_id: vx300s/base_link
+  frame_id: camera_color_optical_frame
+  qw: 0.685
+  qx: -0.677
+  qy: 0.172
+  qz: 0.205
+  x: -0.187
+  y: 0.065
+  z: 0.637
