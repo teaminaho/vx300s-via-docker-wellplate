@@ -8,7 +8,7 @@ RUN sed -r -i 's|(archive\|security)\.ubuntu\.com/ubuntu|ftp.jaist.ac.jp/pub/Lin
     rm -rf /var/cache/apt/*
 
 WORKDIR /app
-COPY docker-entrypoint.sh xsarm_amd64_install.sh /app
+COPY docker-entrypoint.sh xsarm_amd64_install.sh /app/
 RUN ./xsarm_amd64_install.sh
 
 CMD [ "./docker-entrypoint.sh" ]
