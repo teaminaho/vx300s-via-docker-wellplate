@@ -33,6 +33,7 @@ services:
       - "./config/ros_python_logging.conf:/python_logging.conf:ro"
       - "./config/ros_cpp_logging.conf:/cpp_logging.conf:ro"
       - "./config/perception:/root/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/interbotix_xsarm_perception/config/:rw"
+      - "./config/control:/app/config/control:ro"
       - "./vx300s/docker-entrypoint.sh:/app/docker-entrypoint.sh:ro"
       - "./vx300s/scripts:/app/scripts:ro"
     logging: *default-logging

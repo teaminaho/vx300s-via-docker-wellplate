@@ -1,3 +1,4 @@
+import yaml
 import numpy as np
 import rospy
 from sensor_msgs.msg import JointState
@@ -14,9 +15,10 @@ from interbotix_perception_modules.pointcloud import InterbotixPointCloudInterfa
 
 
 class PickPlaceRunner:
-    MAX_EFFORT = [1200.0, 1500.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0]
-
     def __init__(self):
+        with open('/app/config/control/control_parameters.yaml', 'r') as f:
+            self.config = yaml.safe_load(f)
+
         rospy.Subscriber("/vx300s/joint_states", JointState, self.callback_states)
 
         # Initialize the arm module along with the pointcloud and armtag modules
@@ -24,10 +26,10 @@ class PickPlaceRunner:
         self.pcl = InterbotixPointCloudInterface()
 
     def callback_states(self, joint_states):
-        if np.any(np.abs(joint_states.effort) > self.MAX_EFFORT):
+        if np.any(np.abs(joint_states.effort) > self.config['max_effort']):
             rospy.logwarn("Over effort!")
             rospy.logwarn(f"Current effort values: {joint_states.effort}")
-            rospy.logwarn(f"Maximum effort values: {self.MAX_EFFORT}")
+            rospy.logwarn(f"Maximum effort values: {self.config['max_effort']}")
             rospy.signal_shutdown("Over effort")
             rospy.spin()
 
