@@ -14,7 +14,7 @@ from interbotix_perception_modules.pointcloud import InterbotixPointCloudInterfa
 
 
 class PickPlaceRunner:
-    MAX_EFFORT = [1200.0, 1500.0, 1000.0, 500.0, 500.0, 500.0, 1000.0, 1000.0, 1000.0]
+    MAX_EFFORT = [1200.0, 1500.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0]
 
     def __init__(self):
         rospy.Subscriber("/vx300s/joint_states", JointState, self.callback_states)
