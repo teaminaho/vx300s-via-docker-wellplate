@@ -17,7 +17,7 @@ services:
     depends_on:
       - ros_master
     network_mode: "host"
-    restart: always
+    restart: on-failure
     privileged: true
     environment:
       <<: *roslog-environment
