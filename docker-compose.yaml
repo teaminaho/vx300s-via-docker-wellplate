@@ -44,6 +44,4 @@ services:
     command: stdbuf -o L roscore
     restart: always
     network_mode: "host"
-    ports:
-      - "11311:11311"
     logging: *default-logging
