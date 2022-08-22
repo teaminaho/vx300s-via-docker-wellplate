@@ -11,4 +11,6 @@ WORKDIR /app
 COPY docker-entrypoint.sh xsarm_amd64_install.sh /app/
 RUN ./xsarm_amd64_install.sh
 
+RUN pip3 install jupyterlab
+
 CMD [ "./docker-entrypoint.sh" ]

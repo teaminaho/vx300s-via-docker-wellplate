@@ -34,7 +34,9 @@ services:
       - "./config/perception:/root/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/interbotix_xsarm_perception/config/:rw"
       - "./config/control:/app/config/control:ro"
       - "./vx300s/docker-entrypoint.sh:/app/docker-entrypoint.sh:ro"
+      - "./vx300s/jupyter-lab.sh:/app/jupyter-lab.sh:ro"
       - "./vx300s/scripts:/app/scripts:ro"
+      - "./jupyter:/jupyter:rw"
     logging: *default-logging
     # command: "/bin/bash -c 'while :; do sleep 1; done'"
 
