@@ -22,6 +22,7 @@ services:
       <<: *roslog-environment
       PYTHONUNBUFFERED: 1
       DISPLAY: ${DISPLAY}
+      LIBGL_ALWAYS_INDIRECT: 0
     volumes:
       - type: bind
         source: /dev
@@ -39,10 +40,28 @@ services:
       - "./vx300s/scripts:/app/scripts:ro"
       - "./jupyter:/jupyter:rw"
     logging: *default-logging
-    # command: "/bin/bash -c 'while :; do sleep 1; done'"
+    command: ["use_sim:=true"]
+
+  camera:
+    build: ./camera
+    depends_on:
+      - ros_master
+    network_mode: "host"
+    environment:
+      <<: *roslog-environment
+      PYTHONUNBUFFERED: 1
+    privileged: true
+    volumes:
+      - type: bind
+        source: /dev
+        target: /dev
+        read_only: true
+      - "./config/ros_python_logging.conf:/python_logging.conf:ro"
+      - "./config/ros_cpp_logging.conf:/cpp_logging.conf:ro"
+    logging: *default-logging
 
   ros_master:
-    image: ros:melodic-ros-core
+    image: ros:noetic-ros-core
     hostname: localhost
     command: stdbuf -o L roscore
     restart: always
