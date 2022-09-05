@@ -2,7 +2,7 @@
 
 ubuntu_version="$(lsb_release -r -s)"
 ROS_NAME="noetic"
-install_perception=true
+install_perception=false
 install_matlab=false
 
 echo -e "\e[1;33m ******************************************** \e[0m"
@@ -20,13 +20,13 @@ if [ $(dpkg-query -W -f='${Status}' ros-$ROS_NAME-desktop-full 2>/dev/null | gre
   sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
   apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
   curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
-  apt update
-  apt -y install ros-$ROS_NAME-desktop-full
+  apt-get update
+  apt-get -y install ros-$ROS_NAME-desktop-full
   if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
     rm /etc/ros/rosdep/sources.list.d/20-default.list
   fi
   echo "source /opt/ros/$ROS_NAME/setup.bash" >> ~/.bashrc
-  apt -y install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
+  apt-get -y install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
   rosdep init
   rosdep update
 else
@@ -45,20 +45,20 @@ if [ "$install_perception" = true ]; then
     add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -sc) main" -u
     version="2.48.0-0~realsense0.4976"
 
-    apt -y install librealsense2-udev-rules=${version}
-    apt -y install librealsense2-dkms
-    apt -y install librealsense2=${version}
-    apt -y install librealsense2-gl=${version}
-    apt -y install librealsense2-gl-dev=${version}
-    apt -y install librealsense2-gl-dbg=${version}
-    apt -y install librealsense2-net=${version}
-    apt -y install librealsense2-net-dev=${version}
-    apt -y install librealsense2-net-dbg=${version}
-    apt -y install librealsense2-utils=${version}
-    apt -y install librealsense2-dev=${version}
-    apt -y install librealsense2-dbg=${version}
+    apt-get -y install librealsense2-udev-rules=${version}
+    apt-get -y install librealsense2-dkms
+    apt-get -y install librealsense2=${version}
+    apt-get -y install librealsense2-gl=${version}
+    apt-get -y install librealsense2-gl-dev=${version}
+    apt-get -y install librealsense2-gl-dbg=${version}
+    apt-get -y install librealsense2-net=${version}
+    apt-get -y install librealsense2-net-dev=${version}
+    apt-get -y install librealsense2-net-dbg=${version}
+    apt-get -y install librealsense2-utils=${version}
+    apt-get -y install librealsense2-dev=${version}
+    apt-get -y install librealsense2-dbg=${version}
     apt-mark hold librealsense2*
-    apt -y install ros-$ROS_NAME-ddynamic-reconfigure
+    apt-get -y install ros-$ROS_NAME-ddynamic-reconfigure
   else
     echo "librealsense2 already installed!"
   fi
