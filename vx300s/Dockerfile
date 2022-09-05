@@ -9,9 +9,14 @@ RUN sed -r -i 's|(archive\|security)\.ubuntu\.com/ubuntu|ftp.jaist.ac.jp/pub/Lin
     rm -rf /var/cache/apt/*
 
 WORKDIR /app
-COPY docker-entrypoint.sh xsarm_amd64_install.sh /app/
+COPY xsarm_amd64_install.sh /app/
 RUN ./xsarm_amd64_install.sh
 
 RUN pip3 install jupyterlab
+
+COPY arm_apps/ /app/arm_apps/
+COPY docker-entrypoint.sh arm_ctrl_setup.bash /app/
+
+RUN /app/arm_ctrl_setup.bash
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]

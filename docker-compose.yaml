@@ -39,8 +39,10 @@ services:
       - "./vx300s/jupyter-lab.sh:/app/jupyter-lab.sh:ro"
       - "./vx300s/scripts:/app/scripts:ro"
       - "./jupyter:/jupyter:rw"
+      - "./vx300s/arm_apps/:/root/interbotix_ws/src/arm_apps/:rw"
+      - "./config/rviz:/root/interbotix_ws/src/arm_apps/arm_ctrl_rviz/rviz/:rw"
     logging: *default-logging
-    command: ["use_sim:=true"]
+    command: ["use_original_rviz:=false", "use_sim:=true"]
 
   camera:
     build: ./camera

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>arm_ctrl</name>
+  <version>0.0.0</version>
+  <description>The arm_ctrl package</description>
+
+  <maintainer email="matsushima@inaho.co">Takehiro Matsushima</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>arm_ctrl_msgs</build_depend>
+  <build_depend>interbotix_xs_modules</build_depend>
+
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>arm_ctrl_msgs</exec_depend>
+  <exec_depend>interbotix_xs_modules</exec_depend>
+
+  <export>
+  </export>
+</package>

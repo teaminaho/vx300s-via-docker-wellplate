@@ -1,0 +1,5 @@
+uint8 motion_id
+---
+bool done
+---
+uint8 step
