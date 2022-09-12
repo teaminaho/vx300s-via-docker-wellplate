@@ -430,7 +430,7 @@
 
       <joint name="left_finger" type="prismatic">
         <axis xyz="0 1 0"/>
-        <limit effort="5" lower="0.021" upper="0.035" velocity="1"/>
+        <limit effort="5" lower="0.021" upper="0.040" velocity="1"/>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <parent link="$(arg robot_name)/fingers_link"/>
         <child link="$(arg robot_name)/left_finger_link"/>
@@ -470,7 +470,7 @@
 
       <joint name="right_finger" type="prismatic">
         <axis xyz="0 1 0"/>
-        <limit effort="5" lower="-0.035" upper="-0.021" velocity="1"/>
+        <limit effort="5" lower="-0.040" upper="-0.021" velocity="1"/>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <parent link="$(arg robot_name)/fingers_link"/>
         <child link="$(arg robot_name)/right_finger_link"/>
