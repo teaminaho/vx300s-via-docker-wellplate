@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QMap>
+#include <QTimer>
 
 #ifndef Q_MOC_RUN
 #include <ros/ros.h>
@@ -10,6 +11,7 @@
 #endif
 
 #include <std_srvs/Trigger.h>
+#include <std_msgs/Time.h>
 #include <actionlib/client/simple_action_client.h>
 #include <arm_ctrl_msgs/ArmControlAction.h>
 
@@ -28,6 +30,8 @@ namespace arm_ctrl_rviz
         void doneCallback(const actionlib::SimpleClientGoalState &, const arm_ctrl_msgs::ArmControlResultConstPtr &);
         void activeCallback();
         void feedbackCallback(const arm_ctrl_msgs::ArmControlFeedbackConstPtr &);
+        void ctrlHealthCallback(const std_msgs::TimeConstPtr &);
+        void ctrlWatchdogCallback(const ros::TimerEvent &);
 
     public Q_SLOTS:
         void run();
@@ -39,6 +43,10 @@ namespace arm_ctrl_rviz
 
     private:
         ros::ServiceClient run_srv_client_;
+        ros::Subscriber ctrl_health_;
+        ros::Time ctrl_last_health_;
+        ros::Timer ctrl_watchdog_;
+
         Client *action_client_;
 
         QPushButton *run_button_;

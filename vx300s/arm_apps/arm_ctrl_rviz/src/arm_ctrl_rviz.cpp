@@ -36,6 +36,8 @@ namespace arm_ctrl_rviz
             table.push_back({"-----", 255});
             table.push_back({tr("Home"), 0});
             table.push_back({tr("Home and Sleep"), 100});
+            table.push_back({tr("Gripper Open"), 101});
+            table.push_back({tr("Gripper Close"), 102});
             table.push_back({"-----", 255});
             table.push_back({tr("Open Incubator Door"), 1});
             table.push_back({tr("Close Incubator Door"), 2});
@@ -70,6 +72,11 @@ namespace arm_ctrl_rviz
         QObject::connect(run_button_, SIGNAL(clicked()), SLOT(run()));
         QObject::connect(cancel_button_, SIGNAL(clicked()), SLOT(cancel()));
         QObject::connect(cleanup_button_, SIGNAL(clicked()), SLOT(cleanup()));
+
+        ctrl_health_ = nh_.subscribe<std_msgs::Time>("/arm_ctrl/health", 1,
+                                                     boost::bind(&ArmControlPanel::ctrlHealthCallback, this, _1));
+        ctrl_watchdog_ = nh_.createTimer(ros::Duration(0.2),
+                                         boost::bind(&ArmControlPanel::ctrlWatchdogCallback, this, _1));
 
         action_client_ = new Client("/arm_ctrl/run_arm");
 
@@ -127,6 +134,35 @@ namespace arm_ctrl_rviz
     {
         ROS_INFO("Feedback");
         ROS_INFO("%d", feedback->step);
+    }
+
+    void ArmControlPanel::ctrlHealthCallback(const std_msgs::TimeConstPtr &msg)
+    {
+        ctrl_last_health_ = msg->data;
+    }
+
+    void ArmControlPanel::ctrlWatchdogCallback(const ros::TimerEvent &evt)
+    {
+        static uint8_t count = 5;
+        static bool initial = true;
+
+        if (initial && count > 0)
+        {
+            count--;
+            return;
+        }
+        else
+        {
+            initial = false;
+        }
+
+        ros::Duration d = ros::Time::now() - ctrl_last_health_;
+        if (d.toSec() > 0.5)
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Control Service will be down.\nMake sure actual robot arm status,\nthen restart the service manually."));
+        }
     }
 
     void ArmControlPanel::cancel()
