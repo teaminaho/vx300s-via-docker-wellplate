@@ -15,7 +15,7 @@ RUN ./xsarm_amd64_install.sh
 RUN pip3 install jupyterlab
 
 COPY arm_apps/ /app/arm_apps/
-COPY docker-entrypoint.sh arm_ctrl_setup.bash /app/
+COPY vx300s-docker-entrypoint.sh arm_ctrl-docker-entrypoint.sh arm_ctrl_rviz-docker-entrypoint.sh arm_ctrl_setup.bash /app/
 
 RUN /app/arm_ctrl_setup.bash
 
