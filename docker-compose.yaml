@@ -130,6 +130,7 @@ services:
       - "./config/ros_python_logging.conf:/python_logging.conf:ro"
       - "./config/ros_cpp_logging.conf:/cpp_logging.conf:ro"
     logging: *default-logging
+    command: ["_framerate:=30", "_video_device:=/dev/video0", "_pixel_format:=yuyv", "_image_width:=1920", "_image_height:=1080"]
 
   ros_master:
     image: ros:noetic-ros-core
