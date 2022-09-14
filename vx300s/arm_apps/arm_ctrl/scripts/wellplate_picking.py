@@ -74,6 +74,9 @@ class RobotArm(object):
         self._as.register_preempt_callback(self.action_preempt_cb)
         self._as.start()
 
+    def get_default_moving_time():
+        return (2.5, 1.0)
+
     def is_movable(self):
         return self._state != ArmState.STOP_LATCHED
 
@@ -303,31 +306,31 @@ class RobotArm(object):
         yield self.open_gripper()
 
         # approaching to door lever
-        yield self.set_joints([-4.0, 4.0, -22.5, -19.0, 4.5, 17.0])
+        yield self.set_joints([-4.0, 4.0, -22.5, -19.0, 4.5, 17.0], (2.5, 1.0))
 
         # grab lever
         yield self.close_gripper(0.9)
 
         # operate lever
         yield self.run_position_sequence([
-            [-4.0, -40.0, 25.0, -19.0, 4.5, 17.0],
-            [-4.0, 4.0, -22.5, -19.0, 4.5, 17.0]])
+            ([-4.0, -40.0, 25.0, -19.0, 4.5, 17.0], (2.5, 1.0)),
+            ([-4.0, 4.0, -22.5, -19.0, 4.5, 17.0], (2.5, 1.0))])
 
         # release lever
         yield self.open_gripper()
 
         # leaving from lever
         yield self.run_position_sequence([
-            [-4.0, -8.0, -9.0, -19.0, 4.5, 17.0],
-            [-13.0, -8.0, -9.0, -19.0, 4.5, 17.0],
-            [-13.0, 15.0, 20.0, -19.0, -30.0, 17.0]])
+            ([-4.0, -8.0, -9.0, -19.0, 4.5, 17.0], (2.5, 1.0)),
+            ([-13.0, -8.0, -9.0, -19.0, 4.5, 17.0], (2.5, 1.0)),
+            ([-13.0, 15.0, 20.0, -19.0, -30.0, 17.0], (2.5, 1.0))])
 
         # open door
         yield self.run_position_sequence([
-            [-10.0, 0.0, 45.0, -19.0, -35.0, 17.0],
-            [-5.0, -20.0, 65.0, -19.0, -35.0, 17.0],
-            [10.0, -25.0, 75.0, -19.0, -45.0, 17.0],
-            [40.0, -15.0, 70.0, -19.0, -50.0, 17.0]])
+            ([-10.0, 0.0, 45.0, -19.0, -35.0, 17.0], (2.5, 1.0)),
+            ([-5.0, -20.0, 65.0, -19.0, -35.0, 17.0], (2.5, 1.0)),
+            ([10.0, -25.0, 75.0, -19.0, -45.0, 17.0], (2.5, 1.0)),
+            ([40.0, -15.0, 70.0, -19.0, -50.0, 17.0], (2.5, 1.0))])
 
         yield self.home()
 
@@ -340,13 +343,13 @@ class RobotArm(object):
 
         # close door
         yield self.run_position_sequence([
-            [80.0, -73.0, 88.0, 0.0, -14.0, 0.0],
-            [80.0, 0.0, 60.0, 0.0, -65.0, 0.0],
-            [70.0, 0.0, 60.0, 0.0, -65.0, 0.0],
-            [60.0, -30.0, 83.0, 0.0, -57.0, 0.0],
-            [10.0, -20.0, 80.0, 0.0, -65.0, 0.0],
-            [-13.0, 0.0, 60.0, 0.0, -65.0, 0.0],
-            [-12.0, 17.0, 35.0, 0.0, -55.0, 0.0]])
+            ([80.0, -73.0, 88.0, 0.0, -14.0, 0.0], (2.5, 1.0)),
+            ([80.0, 0.0, 60.0, 0.0, -65.0, 0.0], (2.5, 1.0)),
+            ([70.0, 0.0, 60.0, 0.0, -65.0, 0.0], (2.5, 1.0)),
+            ([60.0, -30.0, 83.0, 0.0, -57.0, 0.0], (2.5, 1.0)),
+            ([10.0, -20.0, 80.0, 0.0, -65.0, 0.0], (2.5, 1.0)),
+            ([-13.0, 0.0, 60.0, 0.0, -65.0, 0.0], (2.5, 1.0)),
+            ([-12.0, 17.0, 35.0, 0.0, -55.0, 0.0], (2.5, 1.0))])
 
         yield self.home()
 
@@ -359,33 +362,33 @@ class RobotArm(object):
 
         # approach to wellplate
         yield self.run_position_sequence([
-            [21.5, 9.5, 13.5, 40.0, -33.0, -36.0],
-            [21.0, 13.3, 7.5, 45.0, -30.5, -41.0]])
+            ([21.5, 9.5, 13.5, 40.0, -33.0, -36.0], (2.5, 1.0)),
+            ([21.0, 13.3, 7.5, 45.0, -30.5, -41.0], (2.5, 1.0))])
 
         # grab wellplate
         yield self.close_gripper(0.9)
 
         # take wellplate out of incubator
         yield self.run_position_sequence([
-            [22.5, 2.0, 20.0, 40.0, -32.0, -35.0],
-            [30.0, -25.0, 47.0, 40.0, -34.0, -36.0]])
+            ([22.5, 2.0, 20.0, 40.0, -32.0, -35.0], (2.5, 1.0)),
+            ([30.0, -25.0, 47.0, 40.0, -34.0, -36.0], (2.5, 1.0))])
 
-        yield self.upper_home()
+        yield self.upper_home((4.0, 1.5))
 
         # take wellplate in front of the stage
-        yield self.set_joints([-89.0, -72.0, 85.0, 0.0, -16.0, 0.0])
+        yield self.set_joints([-89.0, -72.0, 85.0, 0.0, -16.0, 0.0], (3.5, 1.5))
 
         # move wellplate over the stage
         yield self.run_position_sequence([
-            [-89.0, -20.0, 76.0, 0.0, -60.0, 0.0],
-            [-89.0, 2.7, 53.0, 0.0, -62.0, 0.0],
-            [-89.0, 3.8, 54.5, 0.0, -63.0, 0.0]])
+            ([-89.0, -20.0, 76.0, 0.0, -60.0, 0.0], (2.5, 1.0)),
+            ([-89.0, 2.7, 53.0, 0.0, -62.0, 0.0], (2.5, 1.0)),
+            ([-89.0, 3.8, 54.5, 0.0, -63.0, 0.0], (2.5, 1.0))])
 
         # release wellplate
         yield self.open_gripper()
 
         # leaving from over the stage
-        yield self.set_joints([-89.0, -70.0, 85.0, 0.0, -20.0, 0.0])
+        yield self.set_joints([-89.0, -70.0, 85.0, 0.0, -20.0, 0.0], (2.5, 1.0))
 
         yield self.home()
 
@@ -398,32 +401,32 @@ class RobotArm(object):
 
         # move in front of the stage
         yield self.run_position_sequence([
-            [-89.0, -20.0, 76.0, 0.0, -57.0, 0.0],
-            [-88.5, 2.7, 53.0, 0.0, -57.0, 0.0]])
+            ([-89.0, -20.0, 76.0, 0.0, -57.0, 0.0], (2.5, 1.0)),
+            ([-88.5, 2.7, 53.0, 0.0, -57.0, 0.0], (2.5, 1.0))])
 
         # grab wellplate
         yield self.close_gripper(0.9)
 
         # pick wellplate up
         yield self.run_position_sequence([
-            [-88.5, 0.0, 53.0, 0.0, -57.0, 0.0],
-            [-89.0, -20.0, 76.0, 0.0, -60.0, 0.0],
-            [-89.0, -70.0, 85.0, 0.0, -20.0, 0.0]])
+            ([-88.5, 0.0, 53.0, 0.0, -57.0, 0.0], (2.5, 1.0)),
+            ([-89.0, -20.0, 76.0, 0.0, -60.0, 0.0], (2.5, 1.0)),
+            ([-89.0, -70.0, 85.0, 0.0, -20.0, 0.0], (2.5, 1.0))])
 
         # put wellplate into incubator
         yield self.run_position_sequence([
-            [40.0, -40.0, 60.0, 60.0, -43.0, -53.0],
-            [45.0, -28.0, 52.0, 60.0, -52.0, -50.0],
-            [21.5, 9.5, 13.5, 40.0, -33.0, -36.0],
-            [21.0, 13.3, 8.0, 45.0, -30.5, -41.0]])
+            ([40.0, -40.0, 60.0, 60.0, -43.0, -53.0], (4.0, 1.5)),
+            ([45.0, -28.0, 52.0, 60.0, -52.0, -50.0], (3.5, 1.5)),
+            ([21.5, 9.5, 13.5, 40.0, -33.0, -36.0], (2.5, 1.0)),
+            ([21.0, 13.3, 8.0, 45.0, -30.5, -41.0], (2.5, 1.0))])
 
         # release wellplate
         yield self.open_gripper()
 
         # leave from incubator
         yield self.run_position_sequence([
-            [21.5, 9.5, 11.5, 40.0, -35.0, -36.0],
-            [45.0, -28.0, 52.0, 60.0, -52.0, -50.0]])
+            ([21.5, 9.5, 11.5, 40.0, -35.0, -36.0], (2.5, 1.0)),
+            ([45.0, -28.0, 52.0, 60.0, -52.0, -50.0], (2.5, 1.0))])
 
         yield self.home()
 
@@ -439,7 +442,7 @@ class RobotArm(object):
         yield self.set_torque(True)
         yield self.home()
         yield self.sleep()
-        yield self.set_joints([0.0, -105.6, 92.0, 0.0, 42.0, 0.0])
+        yield self.set_joints([0.0, -105.6, 92.0, 0.0, 42.0, 0.0], (2.5, 1.0))
         rospy.sleep(0.5)
         yield self.set_torque(False)
 
@@ -455,24 +458,26 @@ class RobotArm(object):
         yield self.set_torque(True)
         yield self.close_gripper(0.9)
 
-    def set_default_moving_time(self):
-        self._bot.arm.set_trajectory_time(moving_time=2.5, accel_time=1)
+    def set_moving_time(self, time=get_default_moving_time()):
+        moving_time, accel_time = time
+        self._bot.arm.set_trajectory_time(
+            moving_time=moving_time, accel_time=accel_time)
         rospy.sleep(0.2)
 
     @check_proceed
-    def home(self):
-        self.set_default_moving_time()
+    def home(self, time=get_default_moving_time()):
+        self.set_moving_time(time)
         _, b = self._bot.arm.set_ee_pose_components(x=0.2, y=0.0, z=0.2)
         return b
 
     @check_proceed
-    def sleep(self):
-        self.set_default_moving_time()
+    def sleep(self, time=get_default_moving_time()):
+        self.set_moving_time(time)
         return self._bot.arm.go_to_sleep_pose() is None
 
     @check_proceed
-    def upper_home(self):
-        self.set_default_moving_time()
+    def upper_home(self, time=(2.5, 1.0)):
+        self.set_moving_time(time)
         _, b = self._bot.arm.set_ee_pose_components(x=0.17, y=0.0, z=0.27)
         return b
 
@@ -490,21 +495,24 @@ class RobotArm(object):
         return self._bot.dxl.robot_torque_enable(cmd_type='group', name='all', enable=enable) is None
 
     @check_proceed
-    def run_position_sequence(self, positions_sequence):
-        if len(positions_sequence) == 0 or not all([len(s) == 6 for s in positions_sequence]):
+    def run_position_sequence(self, sequence):
+        if len(sequence) == 0 or not all([len(s) == 2 for s in sequence]) or \
+                not all([len(s[0]) == 6 for s in sequence]) or not all([len(s[1]) == 2 for s in sequence]):
             rospy.logfatal(f'specified positions in sequence is invalid.')
-            rospy.logfatal(positions_sequence)
+            rospy.logfatal(sequence)
             raise ValueError
-        for positions in positions_sequence:
+        for goal in sequence:
+            positions, time = goal
             if not self.check_continue():
                 return False
-            if self.set_joints(positions) == False:
+            if self.set_joints(positions, time=time) == False:
                 return False
         return True
 
     @check_proceed
-    def set_joints(self, degree_positions):
-        return self._bot.arm.set_joint_positions(np.radians(degree_positions))
+    def set_joints(self, degree_positions, time=get_default_moving_time()):
+        moving_time, accel_time = time
+        return self._bot.arm.set_joint_positions(np.radians(degree_positions), moving_time=moving_time, accel_time=accel_time)
 
 
 if __name__ == '__main__':
