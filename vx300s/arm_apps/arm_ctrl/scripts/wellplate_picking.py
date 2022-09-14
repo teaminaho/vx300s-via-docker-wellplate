@@ -61,7 +61,8 @@ class RobotArm(object):
 
         self._health_pub = rospy.Publisher(
             "/arm_ctrl/health", Time, queue_size=1, latch=True)
-        self._health_timer = rospy.Timer(rospy.Duration(0.2), self.callback_health_timer)
+        self._health_timer = rospy.Timer(
+            rospy.Duration(0.2), self.callback_health_timer)
 
         rospy.Subscriber("/vx300s/joint_states",
                          JointState, self.callback_states)
@@ -114,8 +115,6 @@ class RobotArm(object):
             print("MARK RUNNING")
             self._state = ArmState.RUNNING
             res = func(self, *args, **kwargs)
-            # print("MARK STOP")
-            # self._state = ArmState.STOPPED if res else ArmState.STOP_LATCHED
             return res
         return inner
 
@@ -143,7 +142,7 @@ class RobotArm(object):
             res = func(self, *args, **kwargs)
             return res
         return inner
- 
+
     def callback_health_timer(self, evt):
         self._health_pub.publish(rospy.get_rostime())
 
