@@ -218,6 +218,13 @@ class RobotArm(object):
                 self._state = ArmState.STOPPED
             return True
 
+        def run_sequence(tasks):
+            for task in tasks:
+                res = run_task(task, False)
+                if not res:
+                    return
+            run_task(self.finishing_task, True)
+
         if goal.motion_id == ArmMotion.DOOR_OPENNING:
             print('DOOR_OPENNING')
             run_task(self.open_incubator_door)
@@ -240,18 +247,20 @@ class RobotArm(object):
             return
         elif goal.motion_id == ArmMotion.WELLPLATE_TO_STAGE_SEQUENCE:
             print('WELLPLATE_TO_STAGE_SEQUENCE')
-            if run_task(self.open_incubator_door, False) and \
-               run_task(self.take_out_wellplate, False) and \
-               run_task(self.close_incubator_door, True):
-                pass
+            run_sequence([
+                self.open_incubator_door,
+                self.take_out_wellplate,
+                self.close_incubator_door,
+            ])
             print('<-action_execute_cb')
             return
         elif goal.motion_id == ArmMotion.WELLPLATE_TO_INCUBATOR_SEQUENCE:
             print('WELLPLATE_TO_INCUBATOR_SEQUENCE')
-            if run_task(self.open_incubator_door, False) and \
-               run_task(self.store_wellplate, False) and \
-               run_task(self.close_incubator_door, True):
-                pass
+            run_sequence([
+                self.open_incubator_door,
+                self.store_wellplate,
+                self.close_incubator_door,
+            ])
             print('<-action_execute_cb')
             return
         elif goal.motion_id == ArmMotion.HOME:
@@ -295,6 +304,11 @@ class RobotArm(object):
             return TriggerResponse(success=True, message="arm is already stopped")
         else:
             return TriggerResponse(success=False, message="arm is not latched stop")
+
+    @mark_running
+    @check_proceed_for_task
+    def finishing_task(self):
+        yield True
 
     @mark_running
     @check_proceed_for_task
