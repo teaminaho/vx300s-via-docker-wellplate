@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="arm_ctrl" pkg="arm_ctrl" type="wellplate_picking.py" required="false" respawn="false" />
+</launch>

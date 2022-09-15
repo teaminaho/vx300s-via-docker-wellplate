@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_model" default="vx300s" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arm_ctrl_rviz)/rviz/arm_control.rviz" ns="/$(arg robot_model)/robot_description" />
+</launch>

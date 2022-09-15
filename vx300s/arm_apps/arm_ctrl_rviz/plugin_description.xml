@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<library path="lib/libarm_ctrl_rviz">
+    <class name="arm_ctrl_rviz/ArmControlPanel" type="arm_ctrl_rviz::ArmControlPanel" base_class_type="rviz::Panel">
+        <description>Arm Control Panel RViz Plugin</description>
+    </class>
+</library>
